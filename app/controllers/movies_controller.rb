@@ -10,8 +10,10 @@ class MoviesController < ApplicationController
     # will render app/views/movies/show.<extension> by default
   end
 
-  def index
-   if params[:sort_by]
+    def index
+    @movies = Movie.all
+    
+    if params[:sort_by]
       @sorting = params[:sort_by]
     else
       @sorting = session[:sort_by]
@@ -29,7 +31,7 @@ class MoviesController < ApplicationController
           @release_sort = 'hilite'
     end
     
-  end
+    end
 
   def new
     # default: render 'new' template
