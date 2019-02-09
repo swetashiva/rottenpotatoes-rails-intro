@@ -11,20 +11,22 @@ class MoviesController < ApplicationController
   end
 
   def index
-    session[:sort]    = params[:sort]    if params[:sort]
-    if session[:sort]
-      case session[:sort]
-      when 'title'
-        @title_hilite = 'hilite'
-      end
-       @movies = Movie.find(:all,
-                        order: session[:sort])
+   if params[:sort_by]
+      @sorting = params[:sort_by]
     else
-     @movies = Movie.all
+      @sorting = session[:sort_by]
     end
     
-    if session[:sort] != params[:sort]
-      redirect_to movies_path(sort: session[:sort])
+    if @sorting!=session[:sort_by]
+      session[:sort_by] = @sorting
+    end
+    
+    if @sorting == 'title'
+          @movies = @movies.order(@sorting)
+          @title_sort = 'hilite'
+    elsif @sorting == 'release_date'
+          @movies = @movies.order(@sorting)
+          @release_sort = 'hilite'
     end
     
   end
