@@ -24,7 +24,7 @@ class MoviesController < ApplicationController
     end
     
     if @sorting == 'title'
-          @movies = Movie.find(:all, order: session[:sort])
+          @movies = @movies.order(@sorting)
           @title_sort = 'hilite'
     elsif @sorting == 'release_date'
           @movies = @movies.order(@sorting)
