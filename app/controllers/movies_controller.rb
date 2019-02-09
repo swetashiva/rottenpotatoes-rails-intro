@@ -1,5 +1,6 @@
 class MoviesController < ApplicationController
-
+   @all_ratings = ['G','PG','PG-13','R']
+   
   def movie_params
     params.require(:movie).permit(:title, :rating, :description, :release_date)
   end
@@ -11,7 +12,7 @@ class MoviesController < ApplicationController
   end
   
     def index
-    @all_ratings = ['G','PG','PG-13','R']
+   
     @movies = Movie.all
     
     #storing the sorting parameters
