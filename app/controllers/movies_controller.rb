@@ -25,10 +25,10 @@ class MoviesController < ApplicationController
     
     if @sorting == 'title'
           @movies = @movies.order(@sorting)
-          @title_sort = 'hilite'
+          sort_by_title = 'hilite'
     elsif @sorting == 'release_date'
           @movies = @movies.order(@sorting)
-          @release_sort = 'hilite'
+          sort_by_release_date = 'hilite'
     else  @movies= Movie.all
     end
     
