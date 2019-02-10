@@ -19,12 +19,12 @@ class MoviesController < ApplicationController
     #sorting the rating parameters
     if params[:ratings]
       @ratings_params = params[:ratings].keys
-    #else
-    #  if session[:ratings]
-    #    @ratings_params = session[:ratings]
+    else
+      if session[:ratings]
+        @ratings_params = session[:ratings]
     #  else
     #    @ratings_params = @all_ratings
-    #  end
+      end
     end
     
     if @ratings_params!=session[:ratings]
