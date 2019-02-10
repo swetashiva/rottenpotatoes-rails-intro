@@ -1,6 +1,10 @@
 class Movie < ActiveRecord::Base
-
-        def self.with_ratings(ratings_params)
-         @movies.where('rating in (?)', @ratings_params)
-        end
+  attr_accessible :title, :rating, :description, :release_date, :director
+  def self.all_ratings
+  	result = {}
+  	self.select(:rating).uniq.each do |movie|
+  		result[movie.rating] = 1
+  	end
+  	return result
+  end
 end
