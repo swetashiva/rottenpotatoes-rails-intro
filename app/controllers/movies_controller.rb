@@ -31,7 +31,7 @@ class MoviesController < ApplicationController
       session[:ratings] = @ratings_params
     end
     
-    @movies = Movie.with_ratings(@ratings_params)
+    @movies = Movie.with_ratings([1,1,1,1])
    
     
     #storing the sorting parameters
