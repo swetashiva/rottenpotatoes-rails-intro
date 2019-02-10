@@ -20,13 +20,9 @@ class MoviesController < ApplicationController
       @ratings_params = params[:ratings].keys
     else
       if session[:ratings]
-        @ratings_params = session[:ratings]
+        @ratings_params = session[:ratings].keys
       else
-        @all_ratings ['G'] =1
-        @all_ratings ['PG'] =1
-        @all_ratings ['PG-13'] =1
-        @all_ratings ['R'] =1
-        @ratings_params = @all_ratings
+        @ratings_params = @all_ratings.keys
       end
     end
     
