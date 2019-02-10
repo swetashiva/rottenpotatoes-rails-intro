@@ -14,6 +14,7 @@ class MoviesController < ApplicationController
    
     @all_ratings = ['G','PG','PG-13','R']
     
+    #added comment
     @movies = Movie.all
     
     #sorting the rating parameters
