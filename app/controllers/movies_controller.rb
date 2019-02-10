@@ -15,15 +15,15 @@ class MoviesController < ApplicationController
     @all_ratings = ['G','PG','PG-13','R']
     
     @movies = Movie.all
-    
+    if (params[:ratings] || params[:sort])
     #sorting the rating parameters
     if params[:ratings]
       @ratings_params = params[:ratings].keys
     else
       if session[:ratings]
         @ratings_params = session[:ratings]
-    #  else
-    #    @ratings_params = @all_ratings
+      else
+        @ratings_params = @all_ratings
       end
     end
     
@@ -34,7 +34,8 @@ class MoviesController < ApplicationController
     @movies = @movies.where('rating in (?)', @ratings_params)
     
     #storing the sorting parameters
-    if params[:sort]
+    elsif params[:sort]
+  
       @sorting_params = params[:sort]
     else
       @sorting_params = session[:sort]
@@ -52,8 +53,8 @@ class MoviesController < ApplicationController
           @sort_by_release_date = 'hilite'
     else  @movies= Movie.all
     end
-    
     end
+  end
 
   def new
     # default: render 'new' template
