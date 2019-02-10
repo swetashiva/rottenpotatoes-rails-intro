@@ -12,7 +12,7 @@ class MoviesController < ApplicationController
   
     def index
    
-    enum all_ratings: ["G","PG","PG-13","R"]
+    @all_ratings = ['G','PG','PG-13','R']
     
     @movies = Movie.all
     
@@ -21,9 +21,11 @@ class MoviesController < ApplicationController
       @ratings_params = params[:ratings].keys
     else
       if session[:ratings]
-        @ratings_params = session[:ratings]
+        @ratings_params = params[:ratings].keys
+        #session[:ratings]
       else
-        @ratings_params = @all_ratings
+        @ratings_params = params[:ratings].keys
+        #@all_ratings
       end
     end
     
