@@ -34,13 +34,9 @@ class MoviesController < ApplicationController
       @movies = @movies.where('rating in (?)', @ratings_params)
     
     #storing the sorting parameters
-    else
-      if params[:sort]
+    elsif params[:sort]
         @sorting_params = params[:sort]
-      else
-        @sorting_params = session[:sort]
-      end
-    
+
       if @sorting_params!=session[:sort]
         session[:sort] = @sorting_params
       end
@@ -53,6 +49,8 @@ class MoviesController < ApplicationController
             @sort_by_release_date = 'hilite'
       else  @movies= Movie.all
       end
+    else  
+      @movies= Movie.all
       
     end
   end
