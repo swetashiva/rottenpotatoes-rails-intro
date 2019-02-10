@@ -13,6 +13,7 @@ class MoviesController < ApplicationController
     def index
    
     @all_ratings = ['G','PG','PG-13','R']
+   
     @movies = Movie.all
     
     #sorting the rating parameters
@@ -30,7 +31,8 @@ class MoviesController < ApplicationController
       session[:ratings] = @ratings_params
     end
     
-    @movies = @movies.where('rating in (?)', @ratings_params)
+    @movies = Movie.with_ratings(@ratings_params)
+   
     
     #storing the sorting parameters
     if params[:sort]
