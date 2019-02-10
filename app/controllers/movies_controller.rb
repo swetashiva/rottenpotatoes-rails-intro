@@ -12,11 +12,11 @@ class MoviesController < ApplicationController
   
     def index
    
-    @all_ratings = ['G','PG','PG-13','R']
+    enum all_ratings: ["G","PG","PG-13","R"]
     
     @movies = Movie.all
     
-    #sorting the rating parameters
+    #getting the rating parameters
     if params[:ratings]
       @ratings_params = params[:ratings].keys
     else
