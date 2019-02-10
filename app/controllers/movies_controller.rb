@@ -16,17 +16,15 @@ class MoviesController < ApplicationController
     
     @movies = Movie.all
     
-    #getting the rating parameters
+    #sorting the rating parameters
     if params[:ratings]
       @ratings_params = params[:ratings].keys
-    else
-      if session[:ratings]
-        @ratings_params = params[:ratings].keys
-        #session[:ratings]
-      else
-        @ratings_params = params[:ratings].keys
-        #@all_ratings
-      end
+    #else
+    #  if session[:ratings]
+    #    @ratings_params = session[:ratings]
+    #  else
+    #    @ratings_params = @all_ratings
+    #  end
     end
     
     if @ratings_params!=session[:ratings]
