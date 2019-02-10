@@ -10,49 +10,50 @@ class MoviesController < ApplicationController
     # will render app/views/movies/show.<extension> by default
   end
   
-    def index
+  def index
    
     @all_ratings = ['G','PG','PG-13','R']
     
     @movies = Movie.all
     if (params[:ratings] || params[:sort])
     #sorting the rating parameters
-    if params[:ratings]
-      @ratings_params = params[:ratings].keys
-    else
-      if session[:ratings]
-        @ratings_params = session[:ratings]
+      if params[:ratings]
+          @ratings_params = params[:ratings].keys
       else
-        @ratings_params = @all_ratings
+        if session[:ratings]
+          @ratings_params = session[:ratings]
+        else
+          @ratings_params = @all_ratings
+        end
       end
-    end
-    
-    if @ratings_params!=session[:ratings]
-      session[:ratings] = @ratings_params
-    end
-    
-    @movies = @movies.where('rating in (?)', @ratings_params)
+        
+      if @ratings_params!=session[:ratings]
+        session[:ratings] = @ratings_params
+      end
+        
+      @movies = @movies.where('rating in (?)', @ratings_params)
     
     #storing the sorting parameters
-    elsif params[:sort]
-  
-      @sorting_params = params[:sort]
     else
-      @sorting_params = session[:sort]
-    end
+      if params[:sort]
+        @sorting_params = params[:sort]
+      else
+        @sorting_params = session[:sort]
+      end
     
-    if @sorting_params!=session[:sort]
-      session[:sort] = @sorting_params
-    end
-    
-    if @sorting_params == 'title'
-          @movies = @movies.order(@sorting_params)
-          @sort_by_title = 'hilite'
-    elsif @sorting_params == 'release_date'
-          @movies = @movies.order(@sorting_params)
-          @sort_by_release_date = 'hilite'
-    else  @movies= Movie.all
-    end
+      if @sorting_params!=session[:sort]
+        session[:sort] = @sorting_params
+      end
+        
+      if @sorting_params == 'title'
+            @movies = @movies.order(@sorting_params)
+            @sort_by_title = 'hilite'
+      elsif @sorting_params == 'release_date'
+            @movies = @movies.order(@sorting_params)
+            @sort_by_release_date = 'hilite'
+      else  @movies= Movie.all
+      end
+      
     end
   end
 
