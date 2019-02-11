@@ -14,47 +14,28 @@ class MoviesController < ApplicationController
    
     @all_ratings = ['G','PG','PG-13','R']
     
-    @movies = Movie.all
-    
-    if (params[:ratings] || params[:sort])
-    #sorting the rating parameters
-      if params[:ratings]
-          @ratings_params = params[:ratings].keys
-      else
-        if session[:ratings]
-          @ratings_params = session[:ratings]
-        else
-          @ratings_params = @all_ratings
-        end
-      end
-        
-      if @ratings_params!=session[:ratings]
-        session[:ratings] = @ratings_params
-      end
+    if params[:ratings]
+      session[:ratings]=params[:ratings]
+      @all_ratings = params[:ratings].keys
+    elsif session[:ratings]
+     if session[:sort_by].nil?
+       redirect_to movies_path({:ratings => session[:ratings]})
+     end
     end
-      @movies = @movies.where('rating in (?)', @ratings_params)
     
-    #storing the sorting parameters
-    if params[:sort]
-        @sorting_params = params[:sort]
-
-      if @sorting_params!=session[:sort]
-        session[:sort] = @sorting_params
-      end
-        
-      if @sorting_params == 'title'
-            @movies = @movies.order(@sorting_params)
-            @sort_by_title = 'hilite'
-      elsif @sorting_params == 'release_date'
-            @movies = @movies.order(@sorting_params)
-            @sort_by_release_date = 'hilite'
-      else  @movies= Movie.all
-      end
-    else  
-      @movies= Movie.all
-      
+    if (params[:sort_by])
+      @sort_by =params[:sort_by]
+      session[:sort_by]=@sort_by
+      @movies =Movie.order(@sort_by)
+      !(@all_ratings.nil?) ? @movies.finad_all_by_rating(@all_ratings): @movies
+    elsif session[:sort_by]
+      @sort_by = session[:sort_by]
+      redirect_to movies_path({:sort_by => sort_by, :ratings => session[:ratings]})
+    else 
+      @movie=Movie.finad_all_by_rating(@all_ratings)
     end
   end
+  
 
   def new
     # default: render 'new' template
