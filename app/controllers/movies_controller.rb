@@ -10,37 +10,30 @@ class MoviesController < ApplicationController
     # will render app/views/movies/show.<extension> by default
   end
   
-  def index
-    @first=params[:ratings]
-    there = false
-    @all_ratings = Movie.distinct.pluck(:rating)
-    @movies = Movie.all
-    
-    if params[:ratings].present?
-      @current_ratings=params[:ratings].keys
-      session[:ratings]=params[:ratings]
-      @movies = @movies.where(rating: @current_ratings)
-    elsif session[:ratings].present?
-     params[:ratings]=session[:ratings]
-     there=true
-    else 
-      @current_ratings=Movie.distinct.pluck(:rating)
-    end
-  
-    if params[:sort_by].present?
-      @sort_by=params[:sort_by]
-      session[:sort_by]=params[:sort_by]
-      @movies = @movies.order(@sort_by)
-    elsif session[:sort_by].present?
-     params[:sort_by]=session[:sort_by]
-     there=true
-    end
-    
-    if there
-      flash.keep
-      redirect_to movies_path(params.slice(:ratings, :sort_by))
-    end
-  end
+   def index
+
+    @all_ratings = Movie.ratings
+
+    #Initial setting up of sessions
+    session[:ratings] ||= @all_ratings
+    session[:sort] ||= 'id'
+
+    @title_hilite = session[:title_hilite] = "hilite" if params[:sort] == 'title'
+    @date_hilite = session[:date_hilite] = "hilite" if params[:sort] == 'release_date'
+
+    #Remembering the user's preferences
+    session[:ratings] = params[:ratings].keys if params[:ratings]
+    session[:sort] = params[:sort] if params[:sort]
+
+    #to preserve restfulness
+    redirect_to movies_path(ratings: Hash[session[:ratings].map {|r| [r,1]}], sort: session[:sort]) if  params[:ratings].nil? || params[:sort].nil?
+
+    @ratings = session[:ratings]
+    @sort = session[:sort]
+
+    @movies = Movie.where(rating: @ratings).order(@sort)
+
+   end
   
   
 
