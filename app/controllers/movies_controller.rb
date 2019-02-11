@@ -11,48 +11,47 @@ class MoviesController < ApplicationController
   end
   
   def index
-   
     @all_ratings = ['G','PG','PG-13','R']
-    
     @movies = Movie.all
-    if (params[:ratings] || params[:sort])
+    @ratings_params=all_ratings
+    
     #sorting the rating parameters
-      if params[:ratings]
-          @ratings_params = params[:ratings].keys
+    if params[:ratings]
+      @ratings_params = params[:ratings].keys
+    else
+      if session[:ratings]
+        @ratings_params = session[:ratings]
       else
-        if session[:ratings]
-          @ratings_params = session[:ratings]
-        else
-          @ratings_params = @all_ratings
-        end
+        @ratings_params = @all_ratings
       end
-        
-      if @ratings_params!=session[:ratings]
-        session[:ratings] = @ratings_params
-      end
-        
-      @movies = @movies.where('rating in (?)', @ratings_params)
+    end
+    
+    if @ratings_params!=session[:ratings]
+      session[:ratings] = @ratings_params
+    end
+    
+    @movies = @movies.where('rating in (?)', @ratings_params)
     
     #storing the sorting parameters
-    elsif params[:sort]
-        @sorting_params = params[:sort]
-
-      if @sorting_params!=session[:sort]
-        session[:sort] = @sorting_params
-      end
-        
-      if @sorting_params == 'title'
-            @movies = @movies.order(@sorting_params)
-            @sort_by_title = 'hilite'
-      elsif @sorting_params == 'release_date'
-            @movies = @movies.order(@sorting_params)
-            @sort_by_release_date = 'hilite'
-      else  @movies= Movie.all
-      end
-    else  
-      @movies= Movie.all
-      
+    if params[:sort]
+      @sorting_params = params[:sort]
+    else
+      @sorting_params = session[:sort]
     end
+    
+    if @sorting_params!=session[:sort]
+      session[:sort] = @sorting_params
+    end
+    
+    if @sorting_params == 'title'
+          @movies = @movies.order(@sorting_params)
+          @sort_by_title = 'hilite'
+    elsif @sorting_params == 'release_date'
+          @movies = @movies.order(@sorting_params)
+          @sort_by_release_date = 'hilite'
+    else  @movies= Movie.all
+   end
+    
   end
 
   def new
