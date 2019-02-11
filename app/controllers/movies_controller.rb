@@ -11,30 +11,37 @@ class MoviesController < ApplicationController
   end
   
   def index
-   
-    @all_ratings = ['G','PG','PG-13','R']
+    @first=params[:ratings]
+    there = false
+    @all_ratings = Movie.distinct.pluck(:rating)
+    @movies = Movie.all
     
-    if params[:ratings]
+    if params[:ratings].present?
+      @current_ratings=params[:ratings].keys
       session[:ratings]=params[:ratings]
-      @all_ratings = params[:ratings].keys
-    elsif session[:ratings]
-     if session[:sort_by].nil?
-       redirect_to movies_path({:ratings => session[:ratings]})
-     end
+      @movies = @movies.where(rating: @current_ratings)
+    elsif session[:ratings].present?
+     params[:ratings]=session[:ratings]
+     there=true
+    else 
+      @current_ratings=Movie.distinct.pluck(:rating)
+    end
+  
+    if params[:sort_by].present?
+      @sort_by=params[:sort_by]
+      session[:sort_by]=params[:sort_by]
+      @movies = @movies.order(@sort_by)
+    elsif session[:sort_by].present?
+     params[:sort_by]=session[:sort_by]
+     there=true
     end
     
-    if (params[:sort_by])
-      @sort_by =params[:sort_by]
-      session[:sort_by]=@sort_by
-      @movies =Movie.order(@sort_by)
-      !(@all_ratings.nil?) ? @movies.finad_all_by_rating(@all_ratings): @movies
-    elsif session[:sort_by]
-      @sort_by = session[:sort_by]
-      redirect_to movies_path({:sort_by => sort_by, :ratings => session[:ratings]})
-    else 
-      @movie=Movie.finad_all_by_rating(@all_ratings)
+    if there
+      flash.keep
+      redirect_to movies_path(params.slice(:ratings, :sort_by))
     end
   end
+  
   
 
   def new
