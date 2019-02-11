@@ -31,11 +31,11 @@ class MoviesController < ApplicationController
       if @ratings_params!=session[:ratings]
         session[:ratings] = @ratings_params
       end
-        
+    end
       @movies = @movies.where('rating in (?)', @ratings_params)
     
     #storing the sorting parameters
-    elsif params[:sort]
+    if params[:sort]
         @sorting_params = params[:sort]
 
       if @sorting_params!=session[:sort]
