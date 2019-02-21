@@ -30,7 +30,8 @@ class MoviesController < ApplicationController
 
     @ratings = session[:ratings]
     @sort = session[:sort]
-
+    
+    #query
     @movies = Movie.where(rating: @ratings).order(@sort)
 
    end
